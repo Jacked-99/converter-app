@@ -1,15 +1,23 @@
 import { app, BrowserWindow } from "electron";
 import path from "path";
+import { isDev } from "./util.js";
 
-const createWindow = () => {
+const createWindow = (dev = false) => {
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    // width: 800,
+    // height: 600,
   });
-
-  win.loadFile(path.join(app.getAppPath(), "/dist-react/index.html"));
+  if (dev) {
+    win.loadURL("http://localhost:5123");
+  } else {
+    win.loadFile(path.join(app.getAppPath(), "/dist-react/index.html"));
+  }
 };
 
 app.on("ready", () => {
-  createWindow();
+  if (isDev()) {
+    createWindow(true);
+  } else {
+    createWindow();
+  }
 });
